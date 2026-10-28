@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CV · Eliane</title>
+<meta name="description" content="CV of Eliane, MSc Business Analytics at UCL.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="index.html">Eliane Chin</a>
+    <ul>
+      <li><a class="link" href="index.html">Home</a></li>
+      <li><a class="link" href="index.html#projects">Projects</a></li>
+      <li><a class="link" href="cv.html" aria-current="page">CV</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section>
+    <div class="cv-head">
+      <div style="display:grid;gap:8px">
+        <span class="eyebrow">Curriculum vitae</span>
+        <h1>CV</h1>
+      </div>
+    </div>
+
+    <div class="cv-section">
+      <h2>Education</h2>
+      <div class="entry">
+        <div class="entry-top"><h3>University College London (UCL)</h3><span class="meta">Sep 2025 – Sep 2026</span></div>
+        <span class="meta">MSc Business Analytics · London, United Kingdom</span>
+        <p class="muted">Modules: Predictive Analytics, Natural Language Processing, Programming for Business Analytics, Statistics, Marketing Analytics, Operations Analytics, Decision and Risk Analysis</p>
+      </div>
+      <div class="entry">
+        <div class="entry-top"><h3>National Cheng Kung University (NCKU)</h3><span class="meta">Sep 2019 – Jun 2022</span></div>
+        <span class="meta">BSc/BA Psychology and Economics (Double Major) · Tainan, Taiwan</span>
+        <p class="muted">CGPA 4.28/4.30 (95.47/100) · Ranked 1st of 70 · Outstanding Student for Academic Achievement</p>
+      </div>
+    </div>
+
+    <div class="cv-section">
+      <h2>Experience</h2>
+      <div class="entry">
+        <div class="entry-top"><h3>AI Trading Start-up (Industry Partner)</h3><span class="meta">May 2026 – Aug 2026</span></div>
+        <span class="meta">MSc Consultancy Project · London · <a href="projects/adaptive-swarm.html">Case study</a></span>
+        <ul>
+          <li>Benchmarked Elastic Net, Random Forest and LightGBM in Python on 155K trading records, giving the start-up evidence to choose its training windows and metrics before committing to costly system tests</li>
+          <li>Built walk-forward validation to compare retraining windows, showing that shorter rolling windows improved cross-sectional stock ranking by about 35% (Spearman 0.24 vs 0.18)</li>
+          <li>Found the models could not forecast exact profit (negative R²) but ranked trades reliably (68% of top-decile trades profitable vs 30% in the bottom decile), and presented recommendations to the co-founders</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="entry-top"><h3>Working Holiday Programme, New Zealand</h3><span class="meta">Mar 2023 – Jun 2024</span></div>
+        <span class="meta">Retail &amp; Hospitality Roles</span>
+        <ul>
+          <li>Served as a supermarket assistant, cake shop assistant and restaurant server across three cities, handling till operation, stock rotation and counting, and customer complaints</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cv-section">
+      <h2>Academic projects</h2>
+      <div class="entry">
+        <div class="entry-top"><h3>Hate Speech Classification &amp; Misclassification Analysis</h3><span class="meta">Mar 2026</span></div>
+        <span class="meta"><a href="projects/hate-speech.html">Case study</a></span>
+        <ul>
+          <li>Classified 24,783 tweets as hate speech, offensive or neutral in Python, handling severe class imbalance (hate speech only 5.8%) with stratified splits and class-weighted loss</li>
+          <li>Evaluated flat vs two-stage logistic regression and fine-tuned BERT; selected flat BERT, which raised hate-speech recall from 56% to 71% over the baseline (macro-F1 0.76 vs 0.72)</li>
+          <li>Diagnosed error propagation in the two-stage pipeline and clustered 214 misclassified tweets (Sentence-BERT, K-means) into 6 error types, identifying context-blind reliance on slur words as the most common error pattern</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="entry-top"><h3>Promotion A/B/N Test Analysis (Personal project)</h3><span class="meta">Oct 2026</span></div>
+        <span class="meta"><a href="projects/promotion-ab-test.html">Case study</a></span>
+        <ul>
+          <li>Analysed a three-promotion A/B/N test across 137 stores in Python (pandas, statsmodels), checking randomisation balance and comparing store-level sales with ANOVA and Tukey HSD</li>
+          <li>Controlled for market differences with fixed-effects regression (store-clustered errors) to identify the best promotion, +9% weekly sales over the runner-up, and recommended dropping the weakest (−10k per store per week)</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="entry-top"><h3>Customer Targeting for an E-commerce Retailer</h3><span class="meta">Dec 2025</span></div>
+        <span class="meta"><a href="projects/customer-targeting.html">Case study</a></span>
+        <ul>
+          <li>Built targeting models in R (RFM segmentation, K-means, decision tree, random forest) to decide which customers should receive a subscription offer, based on a break-even response rate</li>
+          <li>Turned a loss-making blanket campaign into a profitable one, with a decision tree giving the highest return on held-out customers</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="entry-top"><h3>Airline Overbooking Optimisation (Excel)</h3><span class="meta">Feb 2026</span></div>
+        <span class="meta"><a href="projects/airline-overbooking.html">Case study</a></span>
+        <ul>
+          <li>Built an Excel model to set economy and business booking limits for a transatlantic route, balancing revenue lost to no-shows against compensation for bumped passengers</li>
+          <li>Modelled uncertain no-show rates from expert estimates and ran 5,000-flight Monte Carlo simulations with sensitivity analysis to compare booking policies</li>
+          <li>Recommended accepting more bookings than seats, especially in business class where no-shows are less predictable, lowering expected cost per flight versus the current policy</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="entry-top"><h3>Exploratory Analysis of Matching Behaviour in Speed-Dating Events</h3><span class="meta">Dec 2025</span></div>
+        <ul>
+          <li>Collaborated with 4 members to analyse 15 behavioural and preference-based factors influencing match outcomes using a dataset of 8,837 observations</li>
+          <li>Compared Logistic Regression, Random Forest and Decision Tree classifiers in Python (scikit-learn), with feature selection and SMOTE to address class imbalance</li>
+          <li>Performed model validation and hyperparameter tuning with cross-validation and GridSearchCV, evaluating models with confusion matrices and recall-focused metrics</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cv-section">
+      <h2>Publication</h2>
+      <div class="entry">
+        <div class="entry-top"><h3>Exploration of a Characteristics Scale for Lifelong Singles</h3><span class="meta">2020</span></div>
+        <span class="meta">1st Author, 7-member team · Taiwan Psychological Association, Poster Publication</span>
+        <ul>
+          <li>Led an end-to-end study in which 20 qualitative interviews informed a survey of 886 respondents, analysed with exploratory factor analysis, ANOVA and regression in SPSS</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cv-section">
+      <h2>Languages &amp; skills</h2>
+      <div class="skills">
+        <div><h3>Languages</h3><p>Mandarin (native), English (IELTS 8.0)</p></div>
+        <div><h3>Technical</h3><p>Python (pandas, scikit-learn, LightGBM, PyTorch, Hugging Face, matplotlib), R (dplyr, fixest, rpart, ranger), Excel (pivot tables, VLOOKUP, IFS, macros, data tables, Monte Carlo simulation), SQL, Tableau (basic), SPSS, MATLAB, C++ (basic)</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Eliane Chin · London</span>
+    <ul>
+      <li><a href="https://www.linkedin.com/in/yuran-chin-b65aab38b/">LinkedIn</a></li>
+      <li><span>eliane.y.chin@gmail.com</span></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

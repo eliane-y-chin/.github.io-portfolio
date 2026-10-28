@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eliane · Data Analyst Portfolio</title>
+<meta name="description" content="Portfolio of Eliane, MSc Business Analytics at UCL: data analysis, machine learning, NLP and decision modelling projects.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="index.html">Eliane Chin</a>
+    <ul>
+      <li><a class="link" href="index.html" aria-current="page">Home</a></li>
+      <li><a class="link" href="index.html#projects">Projects</a></li>
+      <li><a class="link" href="cv.html">CV</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Eliane Chin · London</span>
+    <h1>Data Analyst · MSc Business Analytics, UCL</h1>
+    <p class="lead">Data analyst with a background in psychology and economics. I build models in Python and Excel, test whether they hold up out of sample, and translate the results into what a business should do next.</p>
+    <div class="actions">
+      <a class="btn primary" href="#projects">See my work</a>
+      <a class="btn ghost" href="cv.html">View CV</a>
+    </div>
+  </section>
+
+  <section id="projects" aria-labelledby="projects-title">
+    <span class="eyebrow">Selected work</span>
+    <h2 id="projects-title">Projects</h2>
+
+    <a class="feature" href="projects/adaptive-swarm.html">
+      <div class="body">
+        <span class="muted">Industry collaboration · MSc dissertation · May–Aug 2026</span>
+        <h3>Evaluating Machine Learning Models for Trade Ranking</h3>
+        <p class="muted">With a London-based AI trading start-up, I benchmarked three models on 155,030 stock-day observations. None could forecast exact profit, but tree-based models consistently separated better trades from worse ones.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">LightGBM</span><span class="tag">Random Forest</span><span class="tag">Walk-forward validation</span></div>
+        <span class="more">Read the case study →</span>
+      </div>
+      <div class="stat">
+        <span class="bigstat num">30% <small>→</small> 68%</span>
+        <span class="muted">Share of trades with positive simulated profit, from the lowest- to the highest-ranked 10% of predictions</span>
+      </div>
+    </a>
+
+    <div class="cards">
+      <a class="card" href="projects/hate-speech.html">
+        <span class="muted">NLP · MSc coursework · Mar 2026</span>
+        <h3>Distinguishing Hate Speech from Offensive Language</h3>
+        <p class="muted">Fine-tuned BERT on 24,783 tweets, chose the model that misses the least hate speech, and traced why it confuses hate with offensive language.</p>
+        <div class="tags"><span class="tag">BERT</span><span class="tag">Imbalanced data</span><span class="tag">Error analysis</span></div>
+        <span class="more">Read the case study →</span>
+      </a>
+      <a class="card" href="projects/airline-overbooking.html">
+        <span class="muted">Decision analytics · MSc coursework · Feb 2026</span>
+        <h3>Airline Overbooking Optimisation</h3>
+        <p class="muted">A Monte Carlo model in Excel to find the booking limits that balance the cost of empty seats against compensation for bumped passengers.</p>
+        <div class="tags"><span class="tag">Excel</span><span class="tag">Monte Carlo</span><span class="tag">Sensitivity analysis</span></div>
+        <span class="more">Read the case study →</span>
+      </a>
+      <a class="card" href="projects/customer-targeting.html">
+        <span class="muted">Marketing analytics · MSc coursework · Dec 2025</span>
+        <h3>Finding the Target Customers for a Subscription Offer</h3>
+        <p class="muted">Compared six targeting approaches in R, from RFM segments to decision trees, and turned a loss-making mailing campaign into a profitable one.</p>
+        <div class="tags"><span class="tag">R</span><span class="tag">RFM</span><span class="tag">Decision tree</span></div>
+        <span class="more">Read the case study →</span>
+      </a>
+      <a class="card" href="projects/promotion-ab-test.html">
+        <span class="muted">Experimentation · Personal project · Oct 2026</span>
+        <h3>Choosing the Best of Three Promotions</h3>
+        <p class="muted">Analysed a three-promotion test across 137 stores in Python; comparing stores within their market revealed a winner the simple comparison missed.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">statsmodels</span><span class="tag">A/B testing</span></div>
+        <span class="more">Read the case study →</span>
+      </a>
+    </div>
+  </section>
+
+  <section aria-labelledby="skills-title">
+    <span class="eyebrow">Toolkit</span>
+    <h2 id="skills-title">What I work with</h2>
+    <div class="skills">
+      <div><h3>Python</h3><p>pandas, scikit-learn, LightGBM, PyTorch, Hugging Face, matplotlib</p></div>
+      <div><h3>Excel &amp; decision modelling</h3><p>Solver, data tables, scenario and sensitivity analysis, Monte Carlo simulation</p></div>
+      <div><h3>Statistics</h3><p>Regression, A/B test design, instrumental variables, out-of-sample validation (R, SPSS)</p></div>
+      <div><h3>Data &amp; text</h3><p>SQL, NLP (TF-IDF, embeddings, BERT), error analysis</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Eliane Chin · London</span>
+    <ul>
+      <li><a href="https://www.linkedin.com/in/yuran-chin-b65aab38b/">LinkedIn</a></li>
+      <li><span>eliane.y.chin@gmail.com</span></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>
