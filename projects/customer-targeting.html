@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Customer Targeting · Eliane</title>
+<meta name="description" content="Marketing analytics in R: choosing which customers to target with a subscription offer using RFM, K-means, decision trees and random forests.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Eliane Chin</a>
+    <ul>
+      <li><a class="link" href="../index.html">Home</a></li>
+      <li><a class="link" href="../index.html#projects" aria-current="page">Projects</a></li>
+      <li><a class="link" href="../cv.html">CV</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section>
+    <span class="eyebrow">Case study · Marketing analytics · MSc coursework · Nov–Dec 2025</span>
+    <h1>Finding the Target Customers for a Subscription Offer</h1>
+    <p class="lead">Using course case data for an online retailer, I compared six ways of choosing which customers should receive a mailed subscription offer, and found the approach that turned a loss-making campaign into a profitable one.</p>
+    <div class="tags"><span class="tag">R</span><span class="tag">dplyr</span><span class="tag">RFM</span><span class="tag">K-means</span><span class="tag">Decision tree</span><span class="tag">Random forest</span></div>
+    <div class="kpis">
+      <div class="kpi"><b class="num">6</b><span>targeting approaches compared</span></div>
+      <div class="kpi"><b class="num">Loss → profit</b><span>campaign return after targeting with a decision tree</span></div>
+      <div class="kpi"><b class="num">70 / 30</b><span>train/test split to validate models on unseen customers</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The problem: mailing everyone loses money</h2>
+    <div class="prose">
+      <p>The retailer wanted to mail a discounted subscription offer to its customers. Each letter has a cost, and each customer who subscribes brings in a profit. Dividing one by the other gives a <b>break-even response rate</b>: any group of customers less likely than that to respond costs more to mail than it earns.</p>
+      <p>Too few customers subscribed overall, so mailing everyone lost money. The task was to find the customers worth mailing.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What I compared</h2>
+    <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+      <div class="card"><h3>RFM segments</h3><p class="muted">Grouped customers by recency, frequency and spend, then mailed only the groups whose response rate beat break-even. This made the campaign profitable.</p></div>
+      <div class="card"><h3>K-means</h3><p class="muted">Clustered customers on the standardised RFM variables (elbow method). Profitable, but the weakest approach, because clustering ignores who actually responds.</p></div>
+      <div class="card"><h3>Decision tree</h3><p class="muted">Learned directly which customers subscribe, with recency as the first split. It gave the highest return of all approaches and is the easiest to explain to a marketing team.</p></div>
+      <div class="card"><h3>Random forest</h3><p class="muted">Strong with default settings; limiting tree depth reduced overfitting and improved it further, but it still fell slightly short of the single decision tree.</p></div>
+    </div>
+    <div class="callout"><p><b>Takeaway:</b> models trained on the actual outcome (did the customer subscribe?) beat segmentations that only describe customers. The simplest supervised model won here, and it is also the easiest one to hand to a campaign manager.</p></div>
+  </section>
+
+  <section class="two">
+    <div class="prose">
+      <h2>What I'd recommend</h2>
+      <ol class="recs">
+        <li>Set a break-even response rate before every campaign, and only mail segments predicted to beat it.</li>
+        <li>Use a supervised model such as a decision tree for targeting, and validate it on customers it hasn't seen.</li>
+      </ol>
+    </div>
+    <div class="prose">
+      <h2>Other methods from this module</h2>
+      <ul>
+        <li>Instrumental variables to correct endogeneity when estimating how price affects sales</li>
+        <li>Designing A/B/N tests, including power calculations to size the test</li>
+        <li>Regression discontinuity for questions that can't be tested directly</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>About this project</h2>
+      <p>MSc coursework for UCL's Marketing Analytics module, written in R with dplyr, rpart and ranger. The business scenario and data were provided by the course and do not come from a real company. Detailed figures are omitted because the case is still used in teaching.</p>
+    </div>
+  </section>
+
+  <div class="actions"><a class="btn ghost" href="../index.html#projects">← Back to projects</a></div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Eliane Chin · London</span>
+    <ul>
+      <li><a href="https://www.linkedin.com/in/yuran-chin-b65aab38b/">LinkedIn</a></li>
+      <li><span>eliane.y.chin@gmail.com</span></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

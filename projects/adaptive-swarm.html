@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ranking Trades with ML · Eliane</title>
+<meta name="description" content="MSc dissertation with an AI trading start-up: benchmarking machine learning models for equity prediction.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Eliane Chin</a>
+    <ul>
+      <li><a class="link" href="../index.html">Home</a></li>
+      <li><a class="link" href="../index.html#projects" aria-current="page">Projects</a></li>
+      <li><a class="link" href="../cv.html">CV</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+  <!-- 1. Headline result -->
+  <section>
+    <span class="eyebrow">Case study · MSc Consultancy Project · May–Aug 2026</span>
+    <h1>Evaluating Machine Learning Models for Trade Ranking</h1>
+    <p class="lead"><b>Key result:</b> judged by R², every model failed; judged by ranking, the tree-based models were worth keeping.</p>
+    <p class="lead">For my MSc dissertation I worked with a London-based AI trading start-up to test which modelling choices are worth carrying into its adaptive trading system. Although every model failed to forecast exact profit, the tree-based models consistently distinguished better trades from worse ones.</p>
+    <div class="tags"><span class="tag">Python</span><span class="tag">pandas</span><span class="tag">scikit-learn</span><span class="tag">LightGBM</span><span class="tag">Walk-forward validation</span></div>
+    <div class="kpis">
+      <div class="kpi"><b class="num">155,030</b><span>stock-day observations</span></div>
+      <div class="kpi"><b class="num">98</b><span>large-cap US equities, 2020–2026</span></div>
+      <div class="kpi"><b class="num">250+</b><span>financial and market features</span></div>
+      <div class="kpi"><b class="num">30% → 68%</b><span>positive-profit rate, bottom vs top prediction decile</span></div>
+    </div>
+  </section>
+
+  <!-- 2. Business problem -->
+  <section>
+    <h2>The business problem</h2>
+    <div class="prose">
+      <p>The company builds a stock trading system that updates its models as markets change. Its performance depends on design choices: what target to predict, how much history to keep when retraining, and how to judge whether a model is working.</p>
+      <p>The full system is complex: the effect of one choice is hard to separate from the others, and every system-level experiment is computationally expensive. The company needed cheaper evidence first.</p>
+      <p><b>My job:</b> use transparent benchmark models to show which choices matter, before the company spends compute testing them at scale.</p>
+    </div>
+  </section>
+
+  <!-- 3. Data & approach -->
+  <section>
+    <h2>Data and approach</h2>
+    <div class="prose">
+      <p>The company supplied a daily stock-by-date panel, and the target was a trading outcome from its simulator. I compared a historical-mean baseline with Elastic Net, Random Forest and LightGBM.</p>
+      <p>Markets change, so a random train/test split would leak future information into training. Instead I used an annual <b>walk-forward design</b>: train on the previous two years, test on the next year, then roll forward.</p>
+    </div>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 640 200" width="100%" style="min-width:520px" role="img" aria-label="Walk-forward design: four folds, each training on two years and testing on the following year, from 2022 to 2025">
+          <g font-size="13" fill="var(--muted)" text-anchor="middle" class="num">
+            <text x="160" y="22">2020</text><text x="240" y="22">2021</text><text x="320" y="22">2022</text><text x="400" y="22">2023</text><text x="480" y="22">2024</text><text x="560" y="22">2025</text>
+          </g>
+          <g stroke="var(--line)"><line x1="120" y1="30" x2="600" y2="30"/></g>
+          <g font-size="13" fill="var(--ink)" text-anchor="end">
+            <text x="108" y="59">Fold 1</text><text x="108" y="95">Fold 2</text><text x="108" y="131">Fold 3</text><text x="108" y="167">Fold 4</text>
+          </g>
+          <g fill="var(--accent)" opacity=".28">
+            <rect x="122" y="42" width="156" height="26" rx="4"/><rect x="202" y="78" width="156" height="26" rx="4"/>
+            <rect x="282" y="114" width="156" height="26" rx="4"/><rect x="362" y="150" width="156" height="26" rx="4"/>
+          </g>
+          <g fill="var(--accent)">
+            <rect x="282" y="42" width="76" height="26" rx="4"/><rect x="362" y="78" width="76" height="26" rx="4"/>
+            <rect x="442" y="114" width="76" height="26" rx="4"/><rect x="522" y="150" width="76" height="26" rx="4"/>
+          </g>
+          <g font-size="12" fill="var(--ink)" text-anchor="middle">
+            <text x="200" y="59">train</text><text x="280" y="95">train</text><text x="360" y="131">train</text><text x="440" y="167">train</text>
+          </g>
+          <g font-size="12" fill="var(--accent-ink)" text-anchor="middle" font-weight="600">
+            <text x="320" y="59">test</text><text x="400" y="95">test</text><text x="480" y="131">test</text><text x="560" y="167">test</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>Each model is retrained every year on a rolling two-year window and tested on the following year, giving four genuinely out-of-sample test years (2022–2025).</figcaption>
+    </figure>
+    <div class="prose">
+      <p>I evaluated each model at three levels, because they answer different business questions:</p>
+    </div>
+    <div class="cards">
+      <div class="card"><h3>Exact profit</h3><p class="muted">Can the model predict the dollar PnL of a trade? Measured with R², MAE and RMSE.</p></div>
+      <div class="card"><h3>Timing within a stock</h3><p class="muted">For one stock, can it tell good days to enter from bad ones? Within-ticker Spearman correlation.</p></div>
+      <div class="card"><h3>Choosing between stocks</h3><p class="muted">On a given day, can it rank which stocks look best? Daily cross-sectional Spearman correlation.</p></div>
+    </div>
+  </section>
+
+  <!-- 4. Results -->
+  <section>
+    <h2>What I found</h2>
+    <div class="prose">
+      <p><b>Exact profit is not predictable.</b> All three models had negative out-of-sample R² and did worse than simply predicting the historical average (baseline R² = −0.02). If the goal were dollar forecasts, the project would stop here.</p>
+      <p><b>Ranking is.</b> The same models produced consistent positive ranking signals, and the tree-based models were roughly twice as strong as Elastic Net.</p>
+    </div>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 600 236" width="100%" style="min-width:480px" role="img" aria-label="Spearman correlation by model: Elastic Net 0.120 within-ticker and 0.045 cross-sectional; Random Forest 0.248 and 0.243; LightGBM 0.248 and 0.190">
+          <g stroke="var(--line)">
+            <line x1="150" y1="14" x2="150" y2="186"/><line x1="276.7" y1="14" x2="276.7" y2="186"/><line x1="403.3" y1="14" x2="403.3" y2="186"/><line x1="530" y1="14" x2="530" y2="186"/>
+          </g>
+          <g font-size="13.5" fill="var(--ink)" text-anchor="end">
+            <text x="138" y="46">Elastic Net</text><text x="138" y="106">Random Forest</text><text x="138" y="166">LightGBM</text>
+          </g>
+          <g fill="var(--accent)">
+            <rect x="150" y="24" width="152" height="16" rx="2"/><rect x="150" y="84" width="314.1" height="16" rx="2"/><rect x="150" y="144" width="314.1" height="16" rx="2"/>
+          </g>
+          <g fill="var(--warm)">
+            <rect x="150" y="44" width="57" height="16" rx="2"/><rect x="150" y="104" width="307.8" height="16" rx="2"/><rect x="150" y="164" width="240.7" height="16" rx="2"/>
+          </g>
+          <g font-size="12.5" fill="var(--ink)" class="num">
+            <text x="308" y="37">0.120</text><text x="213" y="57">0.045</text>
+            <text x="470" y="97">0.248</text><text x="464" y="117">0.243</text>
+            <text x="470" y="157">0.248</text><text x="397" y="177">0.190</text>
+          </g>
+          <g font-size="12" fill="var(--muted)" text-anchor="middle" class="num">
+            <text x="150" y="202">0</text><text x="276.7" y="202">0.10</text><text x="403.3" y="202">0.20</text><text x="530" y="202">0.30</text>
+          </g>
+          <g font-size="12.5" fill="var(--ink)">
+            <rect x="150" y="216" width="12" height="12" rx="2" fill="var(--accent)"/><text x="168" y="227">Timing within a stock</text>
+            <rect x="330" y="216" width="12" height="12" rx="2" fill="var(--warm)"/><text x="348" y="227">Choosing between stocks</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>Spearman rank correlation between predictions and realised PnL, averaged over the four test years (2022–2025). Stock outcomes are very noisy, so even modest rank correlations can separate stronger opportunities from weaker ones, as the decile results below show.</figcaption>
+    </figure>
+    <div class="callout">
+      <p><b>What that means in practice:</b> for the tree-based models, only about 30% of trades in the lowest-ranked 10% had positive simulated profit, compared with about 68% in the highest-ranked 10%. 91% of individual stocks showed positive ranking performance under both tree-based models.</p>
+    </div>
+    <div class="prose">
+      <p><b>The results held up under pressure.</b> The pattern stayed broadly the same across test years, alternative training windows, alternative targets, sectors, and a separate Nasdaq 100 sample. Sector membership alone could not explain which stocks the models ranked well. One nuance mattered: choosing between stocks was more time-sensitive than timing within a stock, and worked better with shorter, more recent training windows.</p>
+    </div>
+  </section>
+
+  <!-- 5. Recommendations -->
+  <section>
+    <h2>Recommendations to the company</h2>
+    <ol class="recs">
+      <li><b>Judge models on ranking, not exact profit.</b> R² alone would have rejected models that carry useful signal. Add rank-based metrics to the evaluation suite.</li>
+      <li><b>Use nonlinear benchmarks.</b> Random Forest and LightGBM consistently beat the linear model, so they are the bar new system components should clear.</li>
+      <li><b>Keep training data recent for stock selection.</b> More history did not help cross-sectional ranking; shorter rolling windows generally did better.</li>
+      <li><b>Monitor performance stock by stock.</b> Ranking quality varies across tickers, so a portfolio-level average can hide stocks where the model has stopped working.</li>
+    </ol>
+    <div class="prose"><p>Together these narrow down which prediction heads, training windows and metrics are worth testing in the full system, which reduces expensive system-level experiments.</p></div>
+  </section>
+
+  <!-- 6. Limits -->
+  <section class="two">
+    <div class="prose">
+      <h2>Limitations</h2>
+      <p>The targets come from the company's simulator under specific trading assumptions, so the results show predictive ranking ability, not proof of real-world trading profit. Results are measured per stock and day rather than as a full portfolio strategy with transaction costs. Hyperparameters were kept fixed across years for comparability, and models were retrained annually; per-fold tuning and more frequent retraining are natural next tests.</p>
+    </div>
+    <div class="prose">
+      <h2>My role</h2>
+      <p>Individual dissertation. I designed the experiments, built and evaluated the models in Python, ran the robustness analyses and wrote the recommendations, working with the company on the problem definition and data.</p>
+    </div>
+  </section>
+
+  <div class="actions">
+    <a class="btn ghost" href="../index.html#projects">← Back to projects</a>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Eliane Chin · London</span>
+    <ul>
+      <li><a href="https://www.linkedin.com/in/yuran-chin-b65aab38b/">LinkedIn</a></li>
+      <li><span>eliane.y.chin@gmail.com</span></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

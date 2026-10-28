@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Promotion A/B/N Test · Eliane</title>
+<meta name="description" content="Analysing a three-arm A/B/N test of fast-food promotions in Python: randomisation checks, ANOVA, market fixed effects and minimum detectable effect.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<style>figure img{width:100%;height:auto;border-radius:6px;background:#fcfcfb}</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Eliane Chin</a>
+    <ul>
+      <li><a class="link" href="../index.html">Home</a></li>
+      <li><a class="link" href="../index.html#projects" aria-current="page">Projects</a></li>
+      <li><a class="link" href="../cv.html">CV</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section>
+    <span class="eyebrow">Case study · Experimentation · Personal project · Oct 2026</span>
+    <h1>Choosing the Best of Three Promotions with an A/B/N Test</h1>
+    <p class="lead">A fast-food chain tested three promotions for a new menu item, each in a random set of stores for four weeks. I analysed the results to decide which promotion to roll out.</p>
+    <div class="tags"><span class="tag">Python</span><span class="tag">pandas</span><span class="tag">statsmodels</span><span class="tag">A/B/N testing</span><span class="tag">ANOVA</span><span class="tag">Fixed effects</span></div>
+    <div class="kpis">
+      <div class="kpi"><b class="num">137</b><span>stores in 10 markets, 4 weeks each</span></div>
+      <div class="kpi"><b class="num">−10k</b><span>weekly sales per store, Promotion 2 vs 1</span></div>
+      <div class="kpi"><b class="num">+9%</b><span>Promotion 1 over Promotion 3, within markets</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Step 1: check the randomisation</h2>
+    <div class="prose">
+      <p>Before comparing results, I checked that the three groups were comparable. Store age (Kruskal-Wallis p = 0.56) and market size (chi-square p = 0.88) were balanced across promotions. Stores were not spread evenly across the 10 markets, though: one market had no stores at all for Promotion 2. That detail becomes important in step 3.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Step 2: one promotion clearly underperforms</h2>
+    <div class="prose">
+      <p>Each store appears four times, so treating 548 rows as independent would overstate precision. I averaged each store's four weeks and compared the 137 store averages with ANOVA and Tukey's test.</p>
+    </div>
+    <figure>
+      <img src="../assets/img/fig_promotion_means.png" alt="Average weekly sales per store: Promotion 1 58.1k, Promotion 2 47.3k, Promotion 3 55.4k, with 95% confidence intervals" width="1400" height="720">
+      <figcaption>Promotion 2 sells significantly less than both others (Tukey-adjusted p = 0.004 and 0.037). The 2.7k gap between Promotions 1 and 3 is not significant in this comparison.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Step 3: compare stores within the same market</h2>
+    <div class="prose">
+      <p>Market explains most of the variation in sales: stores in large markets sell far more than stores in small ones. Because the promotions were unevenly spread across markets, that noise hides smaller differences. Adding market fixed effects to the regression compares each store only with stores in its own market, with standard errors clustered by store.</p>
+    </div>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 730 336" width="100%" style="min-width:560px" role="img" aria-label="Weekly sales compared with Promotion 1. Simple comparison: Promotion 2 is 10.8k lower, clearly below; Promotion 3 is 1.1k lower but its interval crosses zero, so no clear difference. Same-market comparison: Promotion 2 is 9.7k lower and Promotion 3 is 4.9k lower, both clearly below Promotion 1.">
+          <text x="458" y="18" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">Same as Promotion 1</text>
+          <text x="450" y="36" text-anchor="end" font-size="12" fill="var(--muted)">← sells less</text>
+          <g stroke="var(--line)"><line x1="188.0" y1="70" x2="188.0" y2="292"/><line x1="278.0" y1="70" x2="278.0" y2="292"/><line x1="368.0" y1="70" x2="368.0" y2="292"/></g>
+          <line x1="458" y1="24" x2="458" y2="292" stroke="var(--ink)" stroke-width="1.5"/>
+          <g font-size="12" fill="var(--muted)" text-anchor="middle" class="num"><text x="188.0" y="310">−15</text><text x="278.0" y="310">−10</text><text x="368.0" y="310">−5</text><text x="458.0" y="310">0</text></g>
+          <text x="350" y="330" text-anchor="middle" font-size="12" fill="var(--muted)">Difference in weekly sales per store vs Promotion 1 (thousands), with 95% confidence interval</text>
+          <text x="0" y="58" font-weight="700" fill="var(--ink)" font-size="13.5">Simple comparison (controls for market size only)</text><text x="150" y="94" text-anchor="end" fill="var(--ink)" font-size="13">Promotion 2</text><g stroke="var(--warm)" stroke-width="2.5"><line x1="182.6" y1="90" x2="339.2" y2="90"/><line x1="182.6" y1="84" x2="182.6" y2="96"/><line x1="339.2" y1="84" x2="339.2" y2="96"/></g><circle cx="263.6" cy="90" r="6" fill="var(--warm)"/><text x="347.2" y="94" text-anchor="start" font-size="12.5" font-weight="600" fill="var(--ink)" class="num">−10.8k</text><text x="590" y="94" font-size="12.5" font-weight="700" fill="var(--ink)">Clearly lower</text><text x="150" y="132" text-anchor="end" fill="var(--ink)" font-size="13">Promotion 3</text><g stroke="var(--accent)" stroke-width="2.5"><line x1="366.2" y1="128" x2="510.2" y2="128"/><line x1="366.2" y1="122" x2="366.2" y2="134"/><line x1="510.2" y1="122" x2="510.2" y2="134"/></g><circle cx="438.2" cy="128" r="6" fill="var(--accent)"/><text x="518.2" y="132" text-anchor="start" font-size="12.5" font-weight="600" fill="var(--ink)" class="num">−1.1k</text><text x="590" y="132" font-size="12.5" font-weight="400" fill="var(--muted)">No clear difference</text><text x="0" y="182" font-weight="700" fill="var(--ink)" font-size="13.5">Same-market comparison (market fixed effects)</text><text x="150" y="218" text-anchor="end" fill="var(--ink)" font-size="13">Promotion 2</text><g stroke="var(--warm)" stroke-width="2.5"><line x1="261.8" y1="214" x2="299.6" y2="214"/><line x1="261.8" y1="208" x2="261.8" y2="220"/><line x1="299.6" y1="208" x2="299.6" y2="220"/></g><circle cx="283.4" cy="214" r="6" fill="var(--warm)"/><text x="307.6" y="218" text-anchor="start" font-size="12.5" font-weight="600" fill="var(--ink)" class="num">−9.7k</text><text x="590" y="218" font-size="12.5" font-weight="700" fill="var(--ink)">Clearly lower</text><text x="150" y="256" text-anchor="end" fill="var(--ink)" font-size="13">Promotion 3</text><g stroke="var(--accent)" stroke-width="2.5"><line x1="348.2" y1="252" x2="387.8" y2="252"/><line x1="348.2" y1="246" x2="348.2" y2="258"/><line x1="387.8" y1="246" x2="387.8" y2="258"/></g><circle cx="369.8" cy="252" r="6" fill="var(--accent)"/><text x="395.8" y="256" text-anchor="start" font-size="12.5" font-weight="600" fill="var(--ink)" class="num">−4.9k</text><text x="590" y="256" font-size="12.5" font-weight="700" fill="var(--ink)">Clearly lower</text>
+        </svg>
+      </div>
+      <figcaption>If a line crosses the black “same as Promotion 1” line, that promotion cannot be told apart from Promotion 1. In the simple comparison, Promotion 3 crosses it. Comparing stores only within the same market removes most of the noise (R² 0.58 → 0.91), the intervals shrink, and Promotion 3 turns out to sell about 4.9k less per store per week than Promotion 1.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Step 4: how sensitive was the test?</h2>
+    <div class="prose">
+      <p>With about 46 stores per promotion, a simple two-group comparison could only reliably detect differences of around <b>9.6k per week</b> (80% power, 5% significance), about 18% of average sales. That explains why the raw 1-vs-3 gap was invisible, and why reducing noise was the key analytical step.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Step 5: stress-test the result</h2>
+    <figure>
+      <img src="../assets/img/fig_weekly.png" alt="Average weekly sales by promotion over four weeks: flat, parallel lines with Promotion 1 on top, Promotion 3 second and Promotion 2 lowest" width="1400" height="680">
+      <figcaption>Weekly sales stay flat and parallel; the promotions' trends do not differ (p = 0.25), so none has a launch spike that fades within four weeks.</figcaption>
+    </figure>
+    <div class="cards">
+      <div class="card"><h3>Market size</h3><p class="muted">The ranking holds in small, medium and large markets (interaction p = 0.11).</p></div>
+      <div class="card"><h3>Store age</h3><p class="muted">Promotion 1's lead over 3 shrinks from about 6.5k in new stores to under 3k in 20-year-old stores, but it wins at every age. Worth testing directly next time.</p></div>
+      <div class="card"><h3>Unusual stores</h3><p class="muted">Three stores sit far from the model's prediction; removing them barely changes the estimates. Group variances are similar (Levene p = 0.63).</p></div>
+    </div>
+  </section>
+
+  <section class="two">
+    <div class="prose">
+      <h2>Recommendation</h2>
+      <ol class="recs">
+        <li><b>Drop Promotion 2.</b> It was the weakest in every analysis and every market size.</li>
+        <li><b>Roll out Promotion 1</b>, about 9% ahead of Promotion 3 once stores are compared within their market.</li>
+        <li><b>Check costs first.</b> The data has no promotion costs; a much cheaper Promotion 3 could still win on profit.</li>
+        <li><b>Next time, stratify:</b> randomise within each market so every market tests all three promotions, check whether Promotion 1's lead really is smaller in older stores, and run longer than four weeks.</li>
+      </ol>
+    </div>
+    <div class="prose">
+      <h2>About this project</h2>
+      <p>Personal project in Python (pandas, statsmodels, SciPy, matplotlib), built to put the A/B/N test design from my Marketing Analytics module into practice on a public test dataset.</p>
+      <p class="muted">Data: public A/B test sample dataset (IBM Watson Analytics, via Kaggle). The promotions are not described in the data, and there is no cost or profit information.</p>
+    </div>
+  </section>
+
+  <div class="actions"><a class="btn ghost" href="../index.html#projects">← Back to projects</a></div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Eliane Chin · London</span>
+    <ul>
+      <li><a href="https://www.linkedin.com/in/yuran-chin-b65aab38b/">LinkedIn</a></li>
+      <li><span>eliane.y.chin@gmail.com</span></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

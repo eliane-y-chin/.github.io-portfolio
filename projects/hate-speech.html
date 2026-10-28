@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hate Speech Classifier · Eliane</title>
+<meta name="description" content="Distinguishing hate speech from offensive language with BERT, and analysing where the model goes wrong.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+.warning{border:1px solid var(--warm);background:var(--warm-soft);border-radius:10px;padding:12px 16px;font-size:15px;max-width:80ch}
+.clusters{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.clusters .card b.num{font-family:var(--display);font-size:22px}
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Eliane Chin</a>
+    <ul>
+      <li><a class="link" href="../index.html">Home</a></li>
+      <li><a class="link" href="../index.html#projects" aria-current="page">Projects</a></li>
+      <li><a class="link" href="../cv.html">CV</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section>
+    <span class="eyebrow">Case study · NLP · MSc coursework · Mar 2026</span>
+    <h1>Distinguishing Hate Speech from Offensive Language and Analysing Model Errors</h1>
+    <p class="warning"><b>Content note:</b> this project deals with hateful and offensive language. Slurs are described by type and never quoted on this page.</p>
+    <p class="lead">Content moderation needs to separate speech that attacks people for who they are from speech that is merely rude. The two share most of their vocabulary. This project compares four classifiers on 24,783 tweets, selects the one that misses the least hate speech, and traces the patterns behind its mistakes.</p>
+    <div class="tags"><span class="tag">Python</span><span class="tag">BERT</span><span class="tag">scikit-learn</span><span class="tag">Sentence-BERT</span><span class="tag">K-means</span></div>
+    <div class="kpis">
+      <div class="kpi"><b class="num">24,783</b><span>labelled tweets</span></div>
+      <div class="kpi"><b class="num">5.8%</b><span>are hate speech: a heavily imbalanced problem</span></div>
+      <div class="kpi"><b class="num">56% → 71%</b><span>hate speech recall, baseline vs chosen model</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why accuracy is the wrong score here</h2>
+    <div class="prose">
+      <p>The project uses the Davidson et al. (2017) dataset: tweets labelled by crowd workers as <b>hate speech</b> (5.8%), <b>offensive language</b> (77.4%) or <b>neither</b>, i.e. neutral (16.8%). A model that labels every tweet "offensive" scores 77% accuracy and catches no hate speech at all.</p>
+      <p>Models were therefore judged on <b>macro-F1</b>, which weights all three classes equally, and on <b>hate speech recall</b>: the share of real hate speech the model catches. To help the model learn the rare class, I used stratified 80/10/10 splits and weighted the training loss so that hate speech counted about 13 times more than offensive language.</p>
+      <p>Exploratory analysis showed the core difficulty: almost every frequent word in the hate class also appears, often more frequently, in the offensive class. Tweet length was nearly identical across classes. Whatever separates the two lies in context, not in vocabulary.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Four models, one decision</h2>
+    <div class="prose">
+      <p>I compared TF-IDF logistic regression with fine-tuned BERT, each in two designs: a flat model that predicts all three classes at once, and a two-stage model that first separates toxic from neutral tweets, then hate from offensive.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Model</th><th class="r">Macro-F1</th><th class="r">Hate F1</th><th class="r">Hate recall</th><th class="r">Offensive F1</th></tr></thead>
+        <tbody class="num">
+          <tr><td>Logistic regression, flat (baseline)</td><td class="r">0.72</td><td class="r">0.43</td><td class="r">0.56</td><td class="r">0.91</td></tr>
+          <tr><td>Logistic regression, two-stage</td><td class="r">0.71</td><td class="r">0.40</td><td class="r">0.49</td><td class="r">0.91</td></tr>
+          <tr><td><b>BERT, flat (chosen)</b></td><td class="r">0.76</td><td class="r">0.46</td><td class="r"><b>0.71</b></td><td class="r">0.92</td></tr>
+          <tr><td>BERT, two-stage</td><td class="r"><b>0.78</b></td><td class="r">0.49</td><td class="r">0.60</td><td class="r">0.94</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="font-size:15px">Held-out test set, n = 2,479.</p>
+    <div class="callout"><p><b>Why not the model with the best score?</b> Two-stage BERT had the highest macro-F1, but it caught 11 percentage points less hate speech. In moderation, a missed hateful post that stays online does more harm than an offensive post flagged for review, so I chose flat BERT for its recall.</p></div>
+    <div class="prose">
+      <p>BERT beat logistic regression on every metric: its contextual representations pick up differences that word counts cannot. The two-stage design did not help either model, and the next section shows why.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The two-stage design loses data at the first gate</h2>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 640 210" width="100%" style="min-width:540px" role="img" aria-label="Error propagation: of 2,063 toxic test tweets, Stage 1 labels 45 as neutral, where they can never be corrected; 152 more are misclassified in Stage 2">
+          <g font-size="13.5" fill="var(--ink)">
+            <rect x="10" y="70" width="150" height="64" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+            <text x="85" y="97" text-anchor="middle" font-weight="700">2,063</text>
+            <text x="85" y="117" text-anchor="middle" fill="var(--muted)">toxic test tweets</text>
+            <rect x="230" y="70" width="150" height="64" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
+            <text x="305" y="97" text-anchor="middle" font-weight="700">Stage 1</text>
+            <text x="305" y="117" text-anchor="middle" fill="var(--muted)">toxic or neutral?</text>
+            <rect x="460" y="20" width="170" height="64" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
+            <text x="545" y="47" text-anchor="middle" font-weight="700">Stage 2</text>
+            <text x="545" y="67" text-anchor="middle" fill="var(--muted)">152 still misclassified</text>
+            <rect x="460" y="120" width="170" height="64" rx="8" fill="var(--warm-soft)" stroke="var(--warm)"/>
+            <text x="545" y="147" text-anchor="middle" font-weight="700">45 labelled neutral</text>
+            <text x="545" y="167" text-anchor="middle" fill="var(--muted)">never reach Stage 2</text>
+          </g>
+          <g stroke="var(--muted)" stroke-width="1.5" fill="none">
+            <path d="M160 102 H226"/><path d="M380 92 C420 92 420 52 456 52"/><path d="M380 112 C420 112 420 152 456 152"/>
+          </g>
+          <g fill="var(--muted)"><path d="M226 98 l6 4 -6 4z"/><path d="M456 48 l6 4 -6 4z"/><path d="M456 148 l6 4 -6 4z"/></g>
+        </svg>
+      </div>
+      <figcaption>Two-stage BERT on the test set. Toxic tweets wrongly labelled neutral at Stage 1 can never be corrected, and the Stage 2 model faces the same hard hate-versus-offensive boundary as the flat model, with fewer hate examples to learn from.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Where the chosen model goes wrong</h2>
+    <div class="prose">
+      <p>Flat BERT made 214 hate/offensive mistakes on the test set: 181 offensive tweets flagged as hate and 33 hate tweets missed. The high class weight makes it deliberately sensitive. To find patterns, I embedded the misclassified tweets with Sentence-BERT and grouped them with K-means; the elbow method suggested six clusters.</p>
+    </div>
+    <div class="clusters">
+      <div class="card"><b class="num">2 clusters · 82 tweets</b><p><b>Racial slurs in casual, in-group conversation.</b> Reclaimed language between friends is hard to tell from a targeted attack in a short tweet.</p></div>
+      <div class="card"><b class="num">2 clusters · 58 tweets</b><p><b>Homophobic slurs used as generic insults</b>, not aimed at LGBTQ+ people. The words are strong hate signals, but the model applies them without context.</p></div>
+      <div class="card"><b class="num">1 cluster · 28 tweets</b><p><b>Ableist slurs</b> used casually; the same over-reliance on a single word.</p></div>
+      <div class="card"><b class="num">1 cluster · 46 tweets</b><p><b>Mixed insults with no clear target.</b> The only cluster with errors in both directions: the model is genuinely unsure.</p></div>
+    </div>
+    <div class="prose">
+      <p><b>The common thread:</b> the model doesn't miss slurs; it misreads context. It cannot tell who is being targeted, by whom, or how, from one short tweet. This also matches published evidence that this dataset over-labels African American English as hateful, so a strong score here is not proof of fairness.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What I'd tell a moderation team</h2>
+    <ol class="recs">
+      <li><b>Optimise for recall on the harmful class</b>, and choose the metric before choosing the model.</li>
+      <li><b>Route uncertain cases to humans.</b> When the model was unsure whether a tweet was hate or offensive (predicted probability between 0.4 and 0.6), it was right on only 52 of 98 test tweets (53%), barely better than a coin flip. These are the posts a human reviewer should check.</li>
+      <li><b>Add context, not complexity.</b> A second stage didn't help; conversation history or information about the target would.</li>
+      <li><b>Audit for dialect bias</b> before deployment, using fairness metrics broken down by dialect.</li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>My role</h2>
+      <p>I led the methodology, modelling and evaluation. Parts of the code were generated with Claude Code, then manually checked and revised by me.</p>
+      <p class="muted">Limitations: the results come from a single dataset of tweets, so they may not carry over to other platforms; only one way of weighting the classes was tested; and the project does not show which words drove each BERT prediction.</p>
+    </div>
+  </section>
+
+  <div class="actions"><a class="btn ghost" href="../index.html#projects">← Back to projects</a></div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Eliane Chin · London</span>
+    <ul>
+      <li><a href="https://www.linkedin.com/in/yuran-chin-b65aab38b/">LinkedIn</a></li>
+      <li><span>eliane.y.chin@gmail.com</span></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>
